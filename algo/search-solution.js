@@ -10,6 +10,7 @@ function search(tiles) {
     explored.push(node);
     if (isGoal(node)) {
       goal = node;
+      break;
     }
     let childs = getChildState(node);
     for (let i = 0; i < childs.length; i++) {
@@ -19,9 +20,11 @@ function search(tiles) {
     }
   }
   console.log(goal);
+  printSolution(goal);
 }
 
 function heuristicCost(tiles) {
+  let acc = 0;
   for (let i = 0; i < tiles.length; i++) {
     let tile = tiles[i];
     let curr_position = {
@@ -32,8 +35,9 @@ function heuristicCost(tiles) {
       x: tile % 3,
       y: Math.floor(tile/3)
     }
-    return Math.abs(curr_position.x - solution_position.x) + curr_position.y - solution_position.y;
+    acc += Math.abs(curr_position.x - solution_position.x) + Math.abs(curr_position.y - solution_position.y);
   }
+  return acc;
 }
 
 class State {
@@ -139,6 +143,15 @@ function isGoal(node) {
   return node.tiles.reduce((acc, curr, index) => {
     return acc && curr == index;
   }, true);
+}
+
+function printSolution(goalState) {
+  if (goalState == null){
+    return;
+  } else {
+    printSolution(goalState.previous);
+    console.log(goalState.action);
+  }
 }
 
 export { search, isGoal, State }

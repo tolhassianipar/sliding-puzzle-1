@@ -8,6 +8,7 @@ function search(tiles) {
   while (frontier.length > 0) {
     let node = getSmallestInFrontier(frontier);
     explored.push(node);
+    console.log(frontier.length);
     if (isGoal(node)) {
       goal = node;
     }
