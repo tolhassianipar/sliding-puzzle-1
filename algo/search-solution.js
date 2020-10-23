@@ -4,7 +4,7 @@ function search(tiles) {
   let frontier = [];
   let explored = [];
   let goal = null;
-  frontier.push(new State(tiles, 0, null, null))
+  frontier.push(new State(tiles, 0, null, null));
   while (frontier.length > 0) {
     let node = getSmallestInFrontier(frontier);
     explored.push(node);
@@ -29,19 +29,21 @@ function heuristicCost(tiles) {
     let tile = tiles[i];
     let curr_position = {
       x: i % 3,
-      y: Math.floor(i/3)
+      y: Math.floor(i / 3),
     };
     let solution_position = {
       x: tile % 3,
-      y: Math.floor(tile/3)
-    }
-    acc += Math.abs(curr_position.x - solution_position.x) + Math.abs(curr_position.y - solution_position.y);
+      y: Math.floor(tile / 3),
+    };
+    acc +=
+      Math.abs(curr_position.x - solution_position.x) +
+      Math.abs(curr_position.y - solution_position.y);
   }
   return acc;
 }
 
 class State {
-  constructor(tiles, pathCost, previous, action){
+  constructor(tiles, pathCost, previous, action) {
     this.tiles = tiles;
     this.pathCost = pathCost;
     this.previous = previous;
@@ -54,8 +56,7 @@ class State {
 
   equals(other) {
     for (let i = 0; i < this.tiles.length; i++) {
-      if (this.tiles[i] != other.tiles[i])
-        return false;
+      if (this.tiles[i] != other.tiles[i]) return false;
     }
     return true;
   }
@@ -83,53 +84,53 @@ function getChildState(state) {
   let childs = [];
   let position = {
     x: indexOfZero % 3,
-    y: Math.floor(indexOfZero/3)
-  }
+    y: Math.floor(indexOfZero / 3),
+  };
   if (position.x > 0) {
-    childs.push(doAction(state, 'L'));
+    childs.push(doAction(state, "L"));
   }
   if (position.x < 2) {
-    childs.push(doAction(state, 'R'));
+    childs.push(doAction(state, "R"));
   }
-  if(position.y > 0) {
-    childs.push(doAction(state, 'U'));
+  if (position.y > 0) {
+    childs.push(doAction(state, "U"));
   }
-  if(position.y < 2) {
-    childs.push(doAction(state, 'D'));
+  if (position.y < 2) {
+    childs.push(doAction(state, "D"));
   }
   return childs;
 }
 
 function doAction(state, action) {
-  let newTiles = [...state.tiles]
+  let newTiles = [...state.tiles];
   let i = state.tiles.indexOf(8);
   switch (action) {
-    case 'L':
-      newTiles[i] = state.tiles[i-1];
-      newTiles[i-1] = state.tiles[i];
+    case "L":
+      newTiles[i] = state.tiles[i - 1];
+      newTiles[i - 1] = state.tiles[i];
       break;
-    case 'R':
-      newTiles[i] = state.tiles[i+1];
-      newTiles[i+1] = state.tiles[i];
+    case "R":
+      newTiles[i] = state.tiles[i + 1];
+      newTiles[i + 1] = state.tiles[i];
       break;
-    case 'U':
-      newTiles[i-3] = state.tiles[i];
-      newTiles[i] = state.tiles[i-3];
+    case "U":
+      newTiles[i - 3] = state.tiles[i];
+      newTiles[i] = state.tiles[i - 3];
       break;
-    case 'D':
-      newTiles[i+3] = state.tiles[i];
-      newTiles[i] = state.tiles[i+3];
+    case "D":
+      newTiles[i + 3] = state.tiles[i];
+      newTiles[i] = state.tiles[i + 3];
   }
-  return new State(newTiles, state.pathCost+1, state, action);
+  return new State(newTiles, state.pathCost + 1, state, action);
 }
 
 function isExplored(state, explored) {
   if (explored.length == 0) return false;
-  return explored.some(exp => state.equals(exp));
+  return explored.some((exp) => state.equals(exp));
 }
 
 function addToFrontier(state, frontier) {
-  let equalIndex = frontier.findIndex(front => state.equals(front));
+  let equalIndex = frontier.findIndex((front) => state.equals(front));
   if (equalIndex != -1) {
     let front = frontier[equalIndex];
     let smaller = front.compareTo(state) > 0 ? state : front;
@@ -146,7 +147,7 @@ function isGoal(node) {
 }
 
 function printSolution(goalState) {
-  if (goalState == null){
+  if (goalState == null) {
     return;
   } else {
     printSolution(goalState.previous);
@@ -154,4 +155,4 @@ function printSolution(goalState) {
   }
 }
 
-export { search, isGoal, State }
+export { search, isGoal, State };
